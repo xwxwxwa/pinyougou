@@ -1,5 +1,5 @@
  //控制层 
-app.controller('specificationController' ,function($scope,$controller   ,specificationService){	
+app.controller('specificationController' ,function($scope,$controller ,specificationService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -75,6 +75,13 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
+	}
+	
+	//增加规格的选项行
+	//这里定义的话  需要下面这样定义  直接定义为空的话会报未定义的错误，这样定义就把entity的基本结构定下来了
+	$scope.entity={specificationOptionList:[]}
+	$scope.addTableRow=function(){
+		$scope.entity.specificationOptionList.push({});
 	}
     
 });	
