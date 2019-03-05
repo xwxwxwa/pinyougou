@@ -5,9 +5,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbSpecificationMapper;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojo.TbSpecificationExample;
 import com.pinyougou.pojo.TbSpecificationExample.Criteria;
+import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojogroup.Specification;
 import com.pinyougou.sellergoods.service.SpecificationService;
 
 import entity.PageResult;
@@ -22,7 +25,8 @@ public class SpecificationServiceImpl implements SpecificationService {
 
 	@Autowired
 	private TbSpecificationMapper specificationMapper;
-	
+	@Autowired
+	private TbSpecificationOptionMapper specificationOptionMapper;
 	/**
 	 * 查询全部
 	 */
@@ -45,8 +49,16 @@ public class SpecificationServiceImpl implements SpecificationService {
 	 * 增加
 	 */
 	@Override
-	public void add(TbSpecification specification) {
-		specificationMapper.insert(specification);		
+	public void add(Specification specification) {
+		//specificationMapper.insert(specification);	现在改了页面传过来的实体之后dao的保存也要改	
+		specificationMapper.insert(specification.getSpecification());//插入规格,返回id
+		
+		//插入详细规格
+		for(TbSpecificationOption option:specification.getSpecificationOptionList()) {
+			option.setSpecId(specification.getSpecification().getId());//设置这个详细 的规格属于哪个ID
+			specificationOptionMapper.insert(option);
+		}
+		
 	}
 
 	

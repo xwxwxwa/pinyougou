@@ -34,7 +34,7 @@ app.controller('specificationController' ,function($scope,$controller ,specifica
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
+		if($scope.entity.specification.id!=null){//如果有ID
 			serviceObject=specificationService.update( $scope.entity ); //修改  
 		}else{
 			serviceObject=specificationService.add( $scope.entity  );//增加 
@@ -79,9 +79,17 @@ app.controller('specificationController' ,function($scope,$controller ,specifica
 	
 	//增加规格的选项行
 	//这里定义的话  需要下面这样定义  直接定义为空的话会报未定义的错误，这样定义就把entity的基本结构定下来了
-	$scope.entity={specificationOptionList:[]}
+	//$scope.entity={specificationOptionList:[]}
 	$scope.addTableRow=function(){
 		$scope.entity.specificationOptionList.push({});
 	}
+	
+	//删除规格选项卡
+	$scope.deleTableRow=function(index){
+		//list删除元素的方法   index是起始位置  然后删除1个元素  批量元素删除
+		$scope.entity.specificationOptionList.splice(index,1);
+	}
+	
+	
     
 });	
