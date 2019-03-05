@@ -10,6 +10,7 @@ import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojo.TbSpecificationExample;
 import com.pinyougou.pojo.TbSpecificationExample.Criteria;
 import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.TbSpecificationOptionExample;
 import com.pinyougou.pojogroup.Specification;
 import com.pinyougou.sellergoods.service.SpecificationService;
 
@@ -64,10 +65,25 @@ public class SpecificationServiceImpl implements SpecificationService {
 	
 	/**
 	 * 修改
+	 * 修改的话  因为原来的规格详细里面的数据为list的  
+	 * 可以先删除原来的数据，再重新插入
 	 */
 	@Override
-	public void update(TbSpecification specification){
-		specificationMapper.updateByPrimaryKey(specification);
+	public void update(Specification specification){
+		//更改规格数据1.先修改规格名称
+		TbSpecification tbSpecification = specification.getSpecification();
+		specificationMapper.updateByPrimaryKey(tbSpecification);
+		//删除规格详细数据
+		TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+		com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria=example.createCriteria();
+		criteria.andSpecIdEqualTo(tbSpecification.getId());
+		specificationOptionMapper.deleteByExample(example);
+		//重新添加详细信息数据
+		for(TbSpecificationOption option:specification.getSpecificationOptionList()){
+			option.setSpecId(tbSpecification.getId());
+			specificationOptionMapper.insert(option);
+			
+		}
 	}	
 	
 	/**
@@ -76,8 +92,22 @@ public class SpecificationServiceImpl implements SpecificationService {
 	 * @return
 	 */
 	@Override
-	public TbSpecification findOne(Long id){
-		return specificationMapper.selectByPrimaryKey(id);
+	public Specification findOne(Long id){
+		//1获取规格
+		TbSpecification tbSpecification= specificationMapper.selectByPrimaryKey(id);
+		//2获取详细规格,因为获得详细信息是一个列表  需要创建查询条件
+		TbSpecificationOptionExample example=new TbSpecificationOptionExample();
+		//创建查询条件
+		com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria= example.createCriteria();
+		//增加查询条件
+		criteria.andSpecIdEqualTo(id);//根据规格ID查询		
+		List<TbSpecificationOption> optionList = specificationOptionMapper.selectByExample(example);
+		//3，构建返回结果。进行填充
+		Specification spec=new Specification();
+		spec.setSpecification(tbSpecification);
+		spec.setSpecificationOptionList(optionList);
+		return spec;
+
 	}
 
 	/**
