@@ -112,11 +112,18 @@ public class SpecificationServiceImpl implements SpecificationService {
 
 	/**
 	 * 批量删除
+	 * 删除数据要删除规格  和规格详细列表
 	 */
 	@Override
 	public void delete(Long[] ids) {
 		for(Long id:ids){
+			//删除规格
 			specificationMapper.deleteByPrimaryKey(id);
+			//删除规格详细列表
+			TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+			com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+			criteria.andSpecIdEqualTo(id);
+			specificationOptionMapper.deleteByExample(example);
 		}		
 	}
 	
