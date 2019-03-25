@@ -75,6 +75,7 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+    }
     
+    $scope.brandList={data:[{id:1,text:'联想'},{id:2,text:'华为'},{id:3,text:'小米'}]};//品牌列表  测试下拉列表
 });	
