@@ -111,4 +111,21 @@ public class SellerController {
 		return sellerService.findPage(seller, page, rows);		
 	}
 	
+	/**
+	 * 更新商家审核状态
+	 * @param sellerId
+	 * @param status
+	 */
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(String sellerId,String status) {
+		try {
+			sellerService.updateStatus(sellerId, status);
+			return new Result(true, "修改成功");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new Result(true, "修改失败");
+		}
+	}
+	
 }

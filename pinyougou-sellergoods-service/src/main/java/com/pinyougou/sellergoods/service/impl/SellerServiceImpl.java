@@ -165,5 +165,18 @@ public class SellerServiceImpl implements SellerService {
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
+
+		@Override
+		public void updateStatus(String sellerId, String status) {
+			// TODO Auto-generated method stub
+			//首先获取实体，然后更新数据
+			//根据id获取实体
+			TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
+			//根据实体进行数据的更新
+			seller.setStatus(status);
+			//这个是mapper的接口  会自动调用mapper。xml文件   进行SQL的执行
+			sellerMapper.updateByPrimaryKey(seller);
+			
+		}
 	
 }

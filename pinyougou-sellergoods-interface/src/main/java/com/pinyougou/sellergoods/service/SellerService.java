@@ -58,4 +58,11 @@ public interface SellerService {
 	 */
 	public PageResult findPage(TbSeller seller, int pageNum,int pageSize);
 	
+	/**
+	 * 更新商家的审核状态
+	 * 参数：id    
+	 * 参数：改变之后的状态status
+	 */
+	public void updateStatus(String sellerId,String status);
+	
 }
