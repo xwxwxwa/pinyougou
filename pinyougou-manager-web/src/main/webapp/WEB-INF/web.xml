@@ -36,7 +36,7 @@
   	<url-pattern>*.do</url-pattern>
   </servlet-mapping>
 
-  <context-param><!--springsecurity 的配置文件-->
+    <context-param><!--springsecurity 的配置文件-->
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/spring-security.xml</param-value>
 	 </context-param>

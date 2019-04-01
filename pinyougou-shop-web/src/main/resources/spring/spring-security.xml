@@ -13,7 +13,9 @@
 	<http pattern="/img/**" security="none"></http>
 	<http pattern="/js/**" security="none"></http>
 	<http pattern="/plugins/**" security="none"></http>
+    <!--申请 -->
 	<http pattern="/seller/add.do" security="none"></http>
+
 
 	<!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
 	<http use-expressions="false">
@@ -28,23 +30,28 @@
 		<logout/>
 	</http>
 	
-	<!-- 认证管理器 -->
+	<!-- 认证管理器   不能写死了-->
 	<authentication-manager>
 		<authentication-provider user-service-ref="userDetailService">	
+            <!--登录的时候进行密码登录-->
 			<password-encoder ref="bcryptEncoder"></password-encoder>
 		</authentication-provider>	
 	</authentication-manager>
 		
 	<!-- 认证类 -->
 	<beans:bean id="userDetailService" class="com.pinyougou.service.UserDetailsServiceImpl">
-		<beans:property name="sellerService" ref="sellerService"></beans:property>
+    <!--name里面的就是那个验证的java类     ref里面代表的是远程引用的了service工程里面的service  是使用dubbo进行远程调用的
+    这个dubbo要使用的话   配置文件  和上面的配置头信息都需要进行改动-->
+	    <beans:property name="sellerService" ref="sellerService"></beans:property>
 	</beans:bean>
 	
-	<!-- 引用dubbo 服务 -->
+	
+	
 	<dubbo:application name="pinyougou-shop-web" />
 	<dubbo:registry address="zookeeper://192.168.25.129:2181"/>	
+    <!--回去注册中心  拿取实现类   dubbo就是靠注册中心进行   管理的     id和上面的  beans里面的name一致就行 -->
 	<dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService"></dubbo:reference>
 	
-	
+
 	<beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
 </beans:beans>

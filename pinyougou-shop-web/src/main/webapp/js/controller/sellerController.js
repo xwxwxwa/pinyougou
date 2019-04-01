@@ -57,8 +57,10 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
         //调用service层的新增方法		
 		sellerService.add( $scope.entity).success(
 			function(response){
+                alert("开始");
 				if(response.success){
                     //增肌成功跳转到登录页面
+                    alert("成功");
 					location.href="shoplogin.html";
 				}else{
 					alert(response.message);
